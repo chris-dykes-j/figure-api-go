@@ -3,7 +3,6 @@
 Rewrite of a previous project, in Go.
 
 TODO
-- [ ] Utilize pgx.
 - [ ] Consider liquibase or a similar tool.
 - [ ] Look into web api documentation tools and OpenAPI standard.
 
