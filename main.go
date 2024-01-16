@@ -2,12 +2,27 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    mux := http.NewServeMux()
-    mux.Handle("/", &HomeHandler{})
-    mux.Handle("/nendoroid", &NendoroidHandler{})
-    mux.Handle("/nendoroid/", &NendoroidHandler{})
-    http.ListenAndServe(":8080", mux)
+    router := gin.Default()
+    router.GET("/", getHomePage)
+    router.GET("/nendoroid", getAllNendoroids)
+    router.GET("/nendoroid/:id", getNendoroidById)
+
+    router.Run("localhost:8080")
+}
+
+func getHomePage(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, "Hi there")
+}
+
+func getAllNendoroids(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, "cool")
+}
+
+func getNendoroidById(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, "cool id bro")
 }
