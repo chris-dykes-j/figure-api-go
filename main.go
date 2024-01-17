@@ -9,22 +9,36 @@ import (
 
 func main() {
     router := gin.Default()
-    repo := r.Init()
-    router.GET("/", getHomePage)
-    router.GET("/nendoroid", getAllNendoroids)
-    router.GET("/nendoroid/:id", getNendoroidById)
+    
+    h := Init()
+
+    router.GET("/", h.getHomePage)
+    router.GET("/nendoroid", h.getAllNendoroids)
+    router.GET("/nendoroid/:id", h.getNendoroidById)
 
     router.Run("localhost:8080")
 }
 
-func getHomePage(c *gin.Context) {
+type NendoroidHandler struct {
+    repo *r.NendoroidRepository
+}
+
+func Init() *NendoroidHandler {
+    repo := r.Init()
+    
+    return &NendoroidHandler{
+        repo: repo,
+    }
+}
+
+func (h *NendoroidHandler) getHomePage(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, "Hi there")
 }
 
-func getAllNendoroids(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, repo.GetAllNendoroids())
+func (h *NendoroidHandler) getAllNendoroids(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, h.repo.GetAllNendoroids())
 }
 
-func getNendoroidById(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, "cool id bro")
+func (h *NendoroidHandler) getNendoroidById(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, "cool") //h.repo.Get)
 }
