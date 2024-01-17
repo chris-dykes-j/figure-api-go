@@ -25,8 +25,7 @@ func Init() *NendoroidRepository {
 }
 
 func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
-    rows, err := r.conn.Query(context.Background(), //"SELECT get_nendoroids()")
-    `
+    rows, err := r.conn.Query(context.Background(), `
         SELECT 
         n.item_number,
         nn.text AS name,
@@ -41,7 +40,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
         LEFT JOIN nendoroid_link as nl on n.id = nl.nendoroid_id and nl.language_code = 'en'
         LEFT JOIN nendoroid_blog_link as nbl on n.id = nbl.nendoroid_id and nbl.language_code = 'en'
         LEFT JOIN nendoroid_details as ndet on n.id = ndet.nendoroid_id and ndet.language_code = 'en';
-    `)
+    `) // TODO Fix this select.
     if err != nil {
         log.Fatal(err)
     }
