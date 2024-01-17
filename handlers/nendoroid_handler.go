@@ -28,5 +28,5 @@ func (h *NendoroidHandler) GetAllNendoroids(c *gin.Context) {
 }
 
 func (h *NendoroidHandler) GetNendoroidById(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, "cool") //h.repo.Get)
+    c.IndentedJSON(http.StatusOK, h.repo.GetNendoroidById(c.Param("id"))) 
 }

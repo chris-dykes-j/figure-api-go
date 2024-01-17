@@ -1,19 +1,19 @@
 package main
 
 import (
-    h "figures/handlers"
+	h "figures/handlers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    router := gin.Default()
-    
-    handler := h.Init()
+	router := gin.Default()
 
-    router.GET("/", handler.GetHomePage)
-    router.GET("/nendoroid", handler.GetAllNendoroids)
-    router.GET("/nendoroid/:id", handler.GetNendoroidById)
+	handler := h.Init()
 
-    router.Run("localhost:8080")
+	router.GET("/", handler.GetHomePage)
+	router.GET("/nendoroid", handler.GetAllNendoroids)
+	router.GET("/nendoroid/:id", handler.GetNendoroidById)
+
+	router.Run("localhost:8080")
 }
