@@ -10,3 +10,5 @@ BEGIN
     AND language_code = 'en';
 END;
 $$ LANGUAGE plpgsql;
+
+DROP FUNCTION get_nendoroid_by_id;

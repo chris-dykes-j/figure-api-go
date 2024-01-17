@@ -37,7 +37,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 	var nendoroids []m.Nendoroid
 	for rows.Next() {
 		var nendo m.Nendoroid
-		err = rows.Scan(&nendo.English.Name)
+		err = rows.Scan(&nendo.Name)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -57,8 +57,8 @@ func (r *NendoroidRepository) GetNendoroidById(id string) m.Nendoroid {
 
 	var nendo m.Nendoroid
 	for row.Next() {
-        nendo.English.ItemNumber = id
-		err = row.Scan(&nendo.English.Name)
+        nendo.ItemNumber = id
+		err = row.Scan(&nendo.Name)
 		if err != nil {
 			log.Fatal(err)
 		}
