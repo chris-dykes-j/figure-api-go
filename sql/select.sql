@@ -1,3 +1,4 @@
+-- TODO Update select to grab more data, like below. Will also need troubleshooting.
 CREATE OR REPLACE FUNCTION get_nendoroid_by_id(item_num int)
 RETURNS TABLE (name varchar(255)) AS $$ 
 DECLARE _id INTEGER;
