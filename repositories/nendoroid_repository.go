@@ -46,3 +46,4 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 
     return nendoroids
 }
+
