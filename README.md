@@ -9,7 +9,6 @@ TODO
 - [ ] Documentation
 - [ ] Live interaction of endpoints
 - [ ] Unit tests
-- [ ] Search, Filter
 - [ ] Pagination
 - [ ] Nendoroid Demo Site (Separate repository) @ demo.anime-figures.moe
 - [ ] Consider using liquibase or a similar tool.
@@ -21,3 +20,4 @@ Complete
 - [x] /nendoroid/
 - [x] New nendoroid data from Goodsmile
 - [x] Implement multilingual search.
+- [x] Search
