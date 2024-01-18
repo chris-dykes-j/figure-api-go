@@ -5,9 +5,7 @@ Rewrite of a previous project, in Go.
 TODO
 - [ ] /figure/ (all items)
 - [ ] /scale/
-- [x] /nendoroid/
 - [ ] Old data from Alter
-- [x] New nendoroid data from Goodsmile
 - [ ] Documentation
 - [ ] Live interaction of endpoints
 - [ ] Unit tests
@@ -18,4 +16,8 @@ TODO
 - [ ] Look into web api documentation tools and OpenAPI standard.
 - [ ] Fix error handling.
 - [ ] Add appropriate HTTP codes.
-- [ ] Implement multilingual functionality
+
+Complete
+- [x] /nendoroid/
+- [x] New nendoroid data from Goodsmile
+- [x] Implement multilingual search.
