@@ -26,21 +26,18 @@ func Init() *NendoroidRepository {
 
 func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
     rows, err := r.conn.Query(context.Background(), `
-        SELECT 
+
+        SELECT
         n.item_number,
-        nn.text AS name,
-        nd.text AS description,
-        nl.text AS item_link,
-        nbl.text AS blog_link,
-        ndet.details
-        FROM
-        nendoroid AS n
-        LEFT JOIN nendoroid_name as nn on n.id = nn.nendoroid_id and nn.language_code = 'en'
-        LEFT JOIN nendoroid_description as nd on n.id = nd.nendoroid_id and nd.language_code = 'en'
-        LEFT JOIN nendoroid_link as nl on n.id = nl.nendoroid_id and nl.language_code = 'en'
-        LEFT JOIN nendoroid_blog_link as nbl on n.id = nbl.nendoroid_id and nbl.language_code = 'en'
-        LEFT JOIN nendoroid_details as ndet on n.id = ndet.nendoroid_id and ndet.language_code = 'en';
-    `) // TODO Fix this select.
+        nd.name,
+        nd.description,
+        nd.item_link,
+        nd.blog_link,
+        nd.details
+        FROM nendoroid AS n
+        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = 'en';
+
+    `) 
     if err != nil {
         log.Fatal(err)
     }
@@ -61,17 +58,31 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 	return nendoroids
 }
 
-func (r *NendoroidRepository) GetNendoroidById(id string) m.Nendoroid {
-	row, err := r.conn.Query(context.Background(), "SELECT get_nendoroid_by_id($1::int);", id)
-	if err != nil {
+func (r *NendoroidRepository) GetNendoroidById(id int) m.Nendoroid {
+	row, err := r.conn.Query(context.Background(),`
+
+        SELECT
+        n.item_number,
+        nd.name,
+        nd.description,
+        nd.item_link,
+        nd.blog_link,
+        nd.details
+        FROM nendoroid AS n
+        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = 'en'
+        WHERE n.item_number = $1;
+
+    `, id)
+    if err != nil {
 		log.Fatal(err)
 	}
 	defer row.Close()
 
 	var nendo m.Nendoroid
 	for row.Next() {
-		nendo.ItemNumber = id
-		err = row.Scan(&nendo.Name)
+		err = row.Scan(
+            &nendo.ItemNumber, &nendo.Name, &nendo.Description,
+            &nendo.ItemLink, &nendo.BlogLink, &nendo.Details)
 		if err != nil {
 			log.Fatal(err)
 		}

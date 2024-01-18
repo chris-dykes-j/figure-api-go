@@ -2,7 +2,9 @@ package handlers
 
 import (
 	r "figures/repositories"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,5 +30,9 @@ func (h *NendoroidHandler) GetAllNendoroids(c *gin.Context) {
 }
 
 func (h *NendoroidHandler) GetNendoroidById(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, h.repo.GetNendoroidById(c.Param("id"))) 
+    id, err := strconv.Atoi(c.Param("id"))
+    if err != nil {
+        log.Fatal(err)
+    }
+    c.IndentedJSON(http.StatusOK, h.repo.GetNendoroidById(id))
 }
