@@ -26,7 +26,7 @@ func Init() *NendoroidRepository {
 	}
 }
 
-func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
+func (r *NendoroidRepository) GetAllNendoroids(lang string) []m.Nendoroid {
     rows, err := r.conn.Query(context.Background(), `
 
         SELECT
@@ -37,14 +37,15 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
         nd.blog_link,
         nd.details
         FROM nendoroid AS n
-        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = 'en';
+        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = $1;
 
-    `) 
+    `, lang) 
     if err != nil {
         fmt.Println(err)
     }
     defer rows.Close()
 
+    // TODO replace append with something efficient. After paging and language code impl.
 	var nendoroids []m.Nendoroid
 	for rows.Next() {
 		var nendo m.Nendoroid
@@ -60,7 +61,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 	return nendoroids
 }
 
-func (r *NendoroidRepository) GetNendoroidById(id int) (m.Nendoroid, error) {
+func (r *NendoroidRepository) GetNendoroidById(id int, lang string) (m.Nendoroid, error) {
 	row, err := r.conn.Query(context.Background(),`
 
         SELECT
@@ -71,10 +72,10 @@ func (r *NendoroidRepository) GetNendoroidById(id int) (m.Nendoroid, error) {
         nd.blog_link,
         nd.details
         FROM nendoroid AS n
-        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = 'en'
-        WHERE n.item_number = $1;
+        LEFT JOIN nendoroid_data AS nd ON n.id = nd.nendoroid_id AND nd.language_code = $1
+        WHERE n.item_number = $2;
 
-    `, id)
+    `, lang, id)
     if err != nil {
         fmt.Println(err)
 	}

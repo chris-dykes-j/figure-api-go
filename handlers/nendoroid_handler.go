@@ -2,6 +2,7 @@ package handlers
 
 import (
 	r "figures/repositories"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -9,15 +10,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
 type NendoroidHandler struct {
     repo *r.NendoroidRepository
+    supportedLangs [3]string
 }
 
 func Init() *NendoroidHandler {
     repo := r.Init()
+    supportedLangs := [3]string{"en", "ja", "zh"} // Unsure best place for this.
     
     return &NendoroidHandler{
         repo: repo,
+        supportedLangs: supportedLangs,
     }
 }
 
@@ -26,7 +31,12 @@ func (h *NendoroidHandler) GetHomePage(c *gin.Context) {
 }
 
 func (h *NendoroidHandler) GetAllNendoroids(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, h.repo.GetAllNendoroids())
+    lang := c.Query("language")
+    if lang == "" {
+        lang = "en"
+    }
+
+    c.IndentedJSON(http.StatusOK, h.repo.GetAllNendoroids(lang))
 }
 
 func (h *NendoroidHandler) GetNendoroidById(c *gin.Context) {
@@ -34,10 +44,26 @@ func (h *NendoroidHandler) GetNendoroidById(c *gin.Context) {
     if err != nil {
         log.Fatal(err)
     }
-    nendo, err := h.repo.GetNendoroidById(id)
+
+    // Handle languages not supported. Currently defaults to english but may reconsider adding an error code.
+    lang := c.Query("language")
+    if !h.isSupportedLang(lang) {
+        lang = "en"
+    }
+
+    nendo, err := h.repo.GetNendoroidById(id, lang)
     if err != nil {
-        c.JSON(404, gin.H{"message": "Nendoroid not found"})
+        c.JSON(404, gin.H{"message": fmt.Sprintf("Nendoroid #%d not found.", id)})
     } else {
         c.IndentedJSON(http.StatusOK, nendo)
     }
+}
+
+func (h *NendoroidHandler) isSupportedLang(lang string) bool {
+    for _, supported := range h.supportedLangs {
+        if supported == lang {
+            return true
+        }
+    }
+    return false
 }
