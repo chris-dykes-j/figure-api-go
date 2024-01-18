@@ -20,4 +20,4 @@ Complete
 - [x] /nendoroid/
 - [x] New nendoroid data from Goodsmile
 - [x] Implement multilingual search.
-- [x] Search
+- [x] Search by name
