@@ -34,5 +34,10 @@ func (h *NendoroidHandler) GetNendoroidById(c *gin.Context) {
     if err != nil {
         log.Fatal(err)
     }
-    c.IndentedJSON(http.StatusOK, h.repo.GetNendoroidById(id))
+    nendo, err := h.repo.GetNendoroidById(id)
+    if err != nil {
+        c.JSON(404, gin.H{"message": "Nendoroid not found"})
+    } else {
+        c.IndentedJSON(http.StatusOK, nendo)
+    }
 }

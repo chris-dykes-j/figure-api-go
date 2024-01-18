@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"context"
+	"errors"
 	m "figures/models"
+	"fmt"
 	"log"
 
 	"github.com/jackc/pgx/v5"
@@ -13,7 +15,7 @@ type NendoroidRepository struct {
 }
 
 func Init() *NendoroidRepository {
-	// Fix later
+	// TODO update connection string
 	conn, err := pgx.Connect(context.Background(), "postgres://chris:@localhost:5432/figures")
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +41,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 
     `) 
     if err != nil {
-        log.Fatal(err)
+        fmt.Println(err)
     }
     defer rows.Close()
 
@@ -50,7 +52,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
             &nendo.ItemNumber, &nendo.Name, &nendo.Description,
             &nendo.ItemLink, &nendo.BlogLink, &nendo.Details)
 		if err != nil {
-			log.Fatal(err)
+            fmt.Println(err)
 		}
 		nendoroids = append(nendoroids, nendo)
 	}
@@ -58,7 +60,7 @@ func (r *NendoroidRepository) GetAllNendoroids() []m.Nendoroid {
 	return nendoroids
 }
 
-func (r *NendoroidRepository) GetNendoroidById(id int) m.Nendoroid {
+func (r *NendoroidRepository) GetNendoroidById(id int) (m.Nendoroid, error) {
 	row, err := r.conn.Query(context.Background(),`
 
         SELECT
@@ -74,7 +76,7 @@ func (r *NendoroidRepository) GetNendoroidById(id int) m.Nendoroid {
 
     `, id)
     if err != nil {
-		log.Fatal(err)
+        fmt.Println(err)
 	}
 	defer row.Close()
 
@@ -84,10 +86,15 @@ func (r *NendoroidRepository) GetNendoroidById(id int) m.Nendoroid {
             &nendo.ItemNumber, &nendo.Name, &nendo.Description,
             &nendo.ItemLink, &nendo.BlogLink, &nendo.Details)
 		if err != nil {
-			log.Fatal(err)
+            fmt.Println(err)
 		}
 		row.Close()
 	}
+    
+    if nendo.ItemNumber == "" {
+        message := fmt.Sprintf("Nendoroid does not exist. Given itemNumber %d", id)
+        return nendo, errors.New(message)
+    }
 
-	return nendo
+	return nendo, nil
 }
