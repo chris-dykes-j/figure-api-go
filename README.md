@@ -16,5 +16,6 @@ TODO
 - [ ] Nendoroid Demo Site (Separate repository) @ demo.anime-figures.moe
 - [ ] Consider using liquibase or a similar tool.
 - [ ] Look into web api documentation tools and OpenAPI standard.
-- [ ] Fix error handling
+- [ ] Fix error handling.
+- [ ] Add appropriate HTTP codes.
 - [ ] Implement multilingual functionality
