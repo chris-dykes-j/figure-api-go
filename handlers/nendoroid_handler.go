@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,12 +14,11 @@ type NendoroidHandler struct {
 	supportedLangs [3]string
 }
 
-func Init() *NendoroidHandler {
-	repo := r.Init()
+func NewNendoHandler(nr *r.NendoroidRepository) *NendoroidHandler {
 	supportedLangs := [3]string{"en", "ja", "zh"} // Unsure best place for this.
 
 	return &NendoroidHandler{
-		repo:           repo,
+		repo:           nr,
 		supportedLangs: supportedLangs,
 	}
 }

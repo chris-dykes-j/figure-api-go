@@ -2,6 +2,8 @@ package main
 
 import (
 	h "figures/handlers"
+	r "figures/repositories"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +11,9 @@ import (
 func main() {
 	router := gin.Default()
 
-	handler := h.Init()
+    conn_str := os.Getenv("FIGURE_DB")
+    repo := r.NewNendoRepository(conn_str)
+	handler := h.NewNendoHandler(repo)
 
 	router.GET("/", handler.GetHomePage)
 	router.GET("/nendoroid", handler.GetAllNendoroids)

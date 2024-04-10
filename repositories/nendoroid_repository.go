@@ -14,9 +14,8 @@ type NendoroidRepository struct {
 	conn *pgx.Conn
 }
 
-func Init() *NendoroidRepository {
-	// TODO update connection string
-	conn, err := pgx.Connect(context.Background(), "postgres://chris:@localhost:5432/figures")
+func NewNendoRepository(db string) *NendoroidRepository {
+	conn, err := pgx.Connect(context.Background(), db) 
 	if err != nil {
 		log.Fatal(err)
 	}
